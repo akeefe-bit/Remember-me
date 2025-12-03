@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remember Me - Never Forget a Face</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0B0F19',
+                            card: '#151A25',
+                            accent: '#6366f1', // Indigo
+                            pop: '#ec4899',   // Pink
+                            cyan: '#06b6d4'   // Cyan
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0F19;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .glass-card {
+            background: linear-gradient(145deg, rgba(21, 26, 37, 0.9), rgba(21, 26, 37, 0.6));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Geometric Grid Background */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Intersection Observer Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-accent selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-accent to-brand-pop flex items-center justify-center">
+                        <i class="fa-solid fa-layer-group text-white text-sm"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">Remember Me</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#features" class="hover:text-brand-accent transition-colors px-3 py-2 text-sm font-medium">Features</a>
+                        <a href="#how-it-works" class="hover:text-brand-accent transition-colors px-3 py-2 text-sm font-medium">How it Works</a>
+                        <a href="#pricing" class="hover:text-brand-accent transition-colors px-3 py-2 text-sm font-medium">Pricing</a>
+                    </div>
+                </div>
+                <div>
+                    <a href="#" class="bg-white text-brand-dark hover:bg-gray-200 px-6 py-2.5 rounded-full text-sm font-bold transition-all transform hover:scale-105 shadow-lg shadow-white/10">
+                        Download App
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <!-- Background Blobs -->
+        <div class="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand-accent/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob"></div>
+        <div class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand-pop/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-0 left-20 w-72 h-72 bg-brand-cyan/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-4000"></div>
+
+        <div class="bg-grid absolute inset-0 z-[-1]"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Hero Text -->
+                <div class="text-center lg:text-left reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border-brand-accent/30 text-brand-accent text-xs font-semibold mb-6">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-accent"></span>
+                        </span>
+                        Available on iOS & Android
+                    </div>
+                    <h1 class="text-5xl lg:text-7xl font-bold tracking-tight leading-tight mb-6">
+                        Master your <br>
+                        <span class="text-gradient">Social Circle.</span>
+                    </h1>
+                    <p class="text-lg text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        Stop forgetting names and awkward "Hey... you" moments. Remember Me is the personal CRM that helps you remember the people who matter, where you met them, and what you talked about.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button class="bg-gradient-to-r from-brand-accent to-brand-pop text-white px-8 py-3.5 rounded-full font-bold text-sm shadow-lg shadow-brand-accent/25 hover:shadow-brand-accent/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-apple text-lg"></i> Get for iPhone
+                        </button>
+                        <button class="glass text-white border border-white/20 hover:bg-white/10 px-8 py-3.5 rounded-full font-bold text-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-google-play text-lg"></i> Get for Android
+                        </button>
+                    </div>
+                    
+                    <div class="mt-10 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500">
+                        <div class="flex -space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-gray-700 border-2 border-brand-dark flex items-center justify-center text-xs">JD</div>
+                            <div class="w-8 h-8 rounded-full bg-gray-600 border-2 border-brand-dark flex items-center justify-center text-xs">AS</div>
+                            <div class="w-8 h-8 rounded-full bg-gray-500 border-2 border-brand-dark flex items-center justify-center text-xs">MK</div>
+                        </div>
+                        <p>Trusted by 10,000+ networkers</p>
+                    </div>
+                </div>
+
+                <!-- Hero Visual (CSS Phone Mockup) -->
+                <div class="relative lg:h-[600px] flex items-center justify-center reveal delay-100">
+                    <!-- Geometric decorations behind phone -->
+                    <div class="absolute w-[350px] h-[350px] border border-white/10 rounded-full animate-spin-slow"></div>
+                    <div class="absolute w-[450px] h-[450px] border border-white/5 rounded-full animate-reverse-spin"></div>
+
+                    <!-- The Phone -->
+                    <div class="relative w-[300px] h-[600px] bg-brand-dark rounded-[3rem] border-8 border-gray-800 shadow-2xl shadow-brand-accent/20 overflow-hidden animate-float z-20">
+                        <!-- Notch -->
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-800 rounded-b-xl z-30"></div>
+                        
+                        <!-- App UI -->
+                        <div class="w-full h-full bg-brand-card flex flex-col relative">
+                            <!-- App Header -->
+                            <div class="pt-12 px-6 pb-4 flex justify-between items-center bg-gradient-to-b from-brand-card to-transparent z-10">
+                                <i class="fa-solid fa-bars text-gray-400"></i>
+                                <span class="font-bold text-white">Remember Me</span>
+                                <i class="fa-solid fa-search text-gray-400"></i>
+                            </div>
+
+                            <!-- Search Bar Mockup -->
+                            <div class="px-6 mb-4">
+                                <div class="bg-gray-800/50 rounded-xl px-4 py-3 flex items-center gap-3 border border-white/5">
+                                    <i class="fa-solid fa-magnifying-glass text-gray-500 text-sm"></i>
+                                    <span class="text-gray-500 text-sm">Search "Met at Coffee..."</span>
+                                </div>
+                            </div>
+
+                            <!-- Content Scroll -->
+                            <div class="flex-1 overflow-hidden relative">
+                                <!-- Profile Card 1 (Hero) -->
+                                <div class="mx-6 mt-2 p-5 rounded-2xl bg-gradient-to-br from-[#1e2532] to-[#151a25] border border-white/5 shadow-lg relative group cursor-pointer hover:border-brand-accent/30 transition-colors">
+                                    <div class="flex items-start justify-between mb-4">
+                                        <div class="flex gap-3">
+                                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                                SJ
+                                            </div>
+                                            <div>
+                                                <h3 class="font-bold text-white">Sarah Jenkins</h3>
+                                                <p class="text-xs text-brand-cyan">Graphic Designer</p>
+                                            </div>
+                                        </div>
+                                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400">
+                                            <i class="fa-solid fa-ellipsis-vertical text-xs"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Context Tags -->
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-2 text-xs text-gray-300">
+                                            <i class="fa-solid fa-location-dot text-brand-pop"></i>
+                                            <span>Blue Bottle Coffee, Soho</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-xs text-gray-300">
+                                            <i class="fa-solid fa-calendar text-brand-accent"></i>
+                                            <span>Oct 12, 2:00 PM</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 pt-4 border-t border-white/5">
+                                        <p class="text-xs text-gray-400 italic">"Mentioned she loves vintage typography. Has a golden retriever named Max."</p>
+                                    </div>
+                                </div>
+
+                                <!-- Profile Card 2 (Blurred below) -->
+                                <div class="mx-6 mt-4 p-4 rounded-2xl bg-[#1e2532] border border-white/5 opacity-50 scale-95">
+                                    <div class="flex gap-3 mb-2">
+                                        <div class="w-10 h-10 rounded-full bg-gray-600"></div>
+                                        <div class="space-y-2">
+                                            <div class="w-24 h-3 bg-gray-600 rounded"></div>
+                                            <div class="w-16 h-2 bg-gray-700 rounded"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Floating UI Element -->
+                                <div class="absolute bottom-6 right-6 w-12 h-12 bg-brand-accent rounded-full flex items-center justify-center shadow-lg shadow-brand-accent/40 text-white animate-bounce">
+                                    <i class="fa-solid fa-plus"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Card Notification -->
+                    <div class="absolute bottom-20 -left-12 bg-white/10 backdrop-blur-xl p-4 rounded-xl border border-white/10 shadow-xl flex items-center gap-4 w-64 animate-float-delayed hidden md:flex">
+                        <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-white">Relationship Saved</p>
+                            <p class="text-xs text-gray-300">Bio updated successfully</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem/Solution Section -->
+    <section class="py-24 bg-brand-card relative border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-sm font-bold text-brand-pop tracking-widest uppercase mb-3 reveal">The Problem</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white mb-12 reveal">Stop playing the "Name Game"</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="glass-card p-8 rounded-2xl text-left hover:border-brand-accent/50 transition-colors reveal delay-100 group">
+                    <div class="w-12 h-12 bg-red-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-red-500/20 transition-colors">
+                        <i class="fa-solid fa-face-flushed text-red-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">The Awkward Hello</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        You recognize the face, but the name is gone. You spend the whole conversation fishing for clues while pretending you know exactly who they are.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card p-8 rounded-2xl text-left hover:border-brand-accent/50 transition-colors reveal delay-200 group">
+                    <div class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
+                        <i class="fa-regular fa-id-card text-orange-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Lost Business Cards</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Physical cards get lost in the laundry or thrown in a drawer. Digital contacts often lack the *context* of how you actually met.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card p-8 rounded-2xl text-left hover:border-brand-accent/50 transition-colors reveal delay-300 group">
+                    <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
+                        <i class="fa-solid fa-brain text-blue-400 text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">The Detail Drain</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Small details matter. Forgetting their job, their kids' names, or their hobbies can cost you a valuable connection.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute right-0 top-1/4 w-[500px] h-[500px] bg-brand-accent/5 rounded-full blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal">
+                <h2 class="text-sm font-bold text-brand-cyan tracking-widest uppercase mb-3">Features</h2>
+                <h3 class="text-3xl md:text-5xl font-bold text-white mb-6">Your Second Brain for People.</h3>
+                <p class="text-gray-400">Remember Me isn't just an address book. It's a context engine designed to help you build stronger relationships.</p>
+            </div>
+
+            <!-- Feature 1: The Bio -->
+            <div class="flex flex-col md:flex-row items-center gap-12 mb-24 reveal">
+                <div class="w-full md:w-1/2 relative">
+                    <div class="relative z-10 glass-card p-6 rounded-2xl border-l-4 border-brand-pop">
+                        <div class="flex gap-4 items-center border-b border-white/10 pb-4 mb-4">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="w-16 h-16 rounded-full bg-gray-700">
+                            <div>
+                                <h4 class="text-xl font-bold">Felix Chen</h4>
+                                <span class="text-sm text-brand-pop bg-brand-pop/10 px-2 py-1 rounded">Architect</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-black/20 p-3 rounded-lg">
+                                <p class="text-xs text-gray-500 uppercase font-bold">Wife</p>
+                                <p class="text-sm">Martha</p>
+                            </div>
+                            <div class="bg-black/20 p-3 rounded-lg">
+                                <p class="text-xs text-gray-500 uppercase font-bold">Hobbies</p>
+                                <p class="text-sm">Surfing, Chess</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Decor square -->
+                    <div class="absolute -top-4 -left-4 w-full h-full border-2 border-brand-pop/20 rounded-2xl -z-10"></div>
+                </div>
+                <div class="w-full md:w-1/2 md:pl-10">
+                    <div class="w-12 h-12 bg-brand-pop/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-fingerprint text-brand-pop text-xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4">Visual Bios</h3>
+                    <p class="text-gray-400 text-lg mb-6">
+                        Snap a photo or import from contacts. Create a quick visual profile that highlights the stuff that actually matters—not just their phone number.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <i class="fa-solid fa-check text-brand-pop"></i> Custom fields for personal details
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <i class="fa-solid fa-check text-brand-pop"></i> Social media integration
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Feature 2: Contextual Logs -->
+            <div class="flex flex-col md:flex-row-reverse items-center gap-12 mb-24 reveal">
+                <div class="w-full md:w-1/2 relative">
+                    <div class="relative z-10 glass-card p-6 rounded-2xl border-l-4 border-brand-accent">
+                        <div class="space-y-4">
+                            <!-- Note Item -->
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-2 h-2 bg-brand-accent rounded-full"></div>
+                                    <div class="w-0.5 h-full bg-white/10 my-1"></div>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 mb-1">Today, 2:15 PM • Starbucks</p>
+                                    <p class="text-sm text-gray-200">Met for coffee. He mentioned he's looking for a React developer for his new startup.</p>
+                                </div>
+                            </div>
+                            <!-- Note Item -->
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-2 h-2 bg-gray-600 rounded-full"></div>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 mb-1">Nov 12 • Tech Mixer</p>
+                                    <p class="text-sm text-gray-400">Initial meeting. Exchanged cards.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Decor square -->
+                    <div class="absolute -bottom-4 -right-4 w-full h-full border-2 border-brand-accent/20 rounded-2xl -z-10"></div>
+                </div>
+                <div class="w-full md:w-1/2 md:pr-10">
+                    <div class="w-12 h-12 bg-brand-accent/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-timeline text-brand-accent text-xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4">Meeting History</h3>
+                    <p class="text-gray-400 text-lg mb-6">
+                        Every interaction is logged with a location and a timestamp. Remember exactly <i>where</i> and <i>when</i> you met someone to trigger your memory instantly.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <i class="fa-solid fa-check text-brand-accent"></i> Automatic geolocation tagging
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <i class="fa-solid fa-check text-brand-accent"></i> Voice-to-text notes for speed
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Feature 3: Smart Search -->
+            <div class="flex flex-col md:flex-row items-center gap-12 reveal">
+                <div class="w-full md:w-1/2 relative">
+                    <div class="relative z-10 glass-card p-6 rounded-2xl border-l-4 border-brand-cyan">
+                        <div class="bg-black/40 rounded-xl p-3 flex items-center gap-3 border border-brand-cyan/50 mb-4 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                            <i class="fa-solid fa-magnifying-glass text-brand-cyan"></i>
+                            <span class="text-white">"Met in Chicago"</span>
+                            <span class="ml-auto text-xs bg-brand-cyan/20 text-brand-cyan px-2 py-1 rounded">Enter</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Annie" class="w-8 h-8 rounded-full">
+                                <span class="text-sm">Annie Hall</span>
+                                <span class="text-xs text-gray-500 ml-auto">Chicago, IL</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bob" class="w-8 h-8 rounded-full">
+                                <span class="text-sm">Bob Vance</span>
+                                <span class="text-xs text-gray-500 ml-auto">Chicago Conf</span>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Decor square -->
+                     <div class="absolute -top-4 -left-4 w-full h-full border-2 border-brand-cyan/20 rounded-2xl -z-10"></div>
+                </div>
+                <div class="w-full md:w-1/2 md:pl-10">
+                    <div class="w-12 h-12 bg-brand-cyan/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-bolt text-brand-cyan text-xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4">Fuzzy Search</h3>
+                    <p class="text-gray-400 text-lg mb-6">
+                        Forget the name? No problem. Search by location, job title, physical description ("Mustache"), or context ("Met at wedding").
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <i class="fa-solid fa-check text-brand-cyan"></i> Natural language processing
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-300">
+                            <i class="fa-solid fa-check text-brand-cyan"></i> Tag-based organization
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- How it works steps -->
+    <section id="how-it-works" class="py-24 bg-gradient-to-b from-brand-card to-brand-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-16">The Remember Me Workflow</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="relative reveal delay-100">
+                    <div class="w-20 h-20 mx-auto bg-gray-800 rounded-full flex items-center justify-center text-2xl font-bold border border-white/10 mb-6 z-10 relative">
+                        1
+                    </div>
+                    <div class="hidden md:block absolute top-10 left-1/2 w-full h-0.5 bg-gray-800 -z-0"></div>
+                    <h3 class="text-xl font-bold mb-2">Create the Bio</h3>
+                    <p class="text-gray-400 text-sm">Snap a picture or add their LinkedIn. Add a quick bio note.</p>
+                </div>
+                
+                <div class="relative reveal delay-200">
+                    <div class="w-20 h-20 mx-auto bg-gray-800 rounded-full flex items-center justify-center text-2xl font-bold border border-white/10 mb-6 z-10 relative">
+                        2
+                    </div>
+                    <div class="hidden md:block absolute top-10 left-1/2 w-full h-0.5 bg-gray-800 -z-0"></div>
+                    <h3 class="text-xl font-bold mb-2">Log the Context</h3>
+                    <p class="text-gray-400 text-sm">Add what you talked about and where. The app tags the location automatically.</p>
+                </div>
+
+                <div class="relative reveal delay-300">
+                    <div class="w-20 h-20 mx-auto bg-brand-accent/20 text-brand-accent rounded-full flex items-center justify-center text-2xl font-bold border border-brand-accent mb-6 z-10 relative shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+                        3
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Instant Recall</h3>
+                    <p class="text-gray-400 text-sm">Search "Coffee" or "Blue Shirt" next time you see them to refresh your memory.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing / CTA -->
+    <section id="pricing" class="py-24 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="glass-card rounded-3xl p-12 text-center border-t border-white/20 shadow-2xl reveal">
+                <h2 class="text-4xl font-bold mb-6">Ready to remember everyone?</h2>
+                <p class="text-gray-400 mb-10 text-lg max-w-2xl mx-auto">
+                    Join thousands of professionals, salespeople, and social butterflies who use Remember Me to build better relationships.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#" class="bg-white text-brand-dark px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg">
+                        Download for Free
+                    </a>
+                </div>
+                <p class="mt-6 text-sm text-gray-500">Free forever for up to 50 contacts. <br class="sm:hidden"> Pro plan available for power users.</p>
+            </div>
+        </div>
+        
+        <!-- Background Gradients -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-96 bg-gradient-to-t from-brand-accent/10 to-transparent pointer-events-none"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center gap-2 mb-4 md:mb-0">
+                    <div class="w-6 h-6 rounded bg-gradient-to-br from-brand-accent to-brand-pop flex items-center justify-center">
+                        <i class="fa-solid fa-layer-group text-white text-[10px]"></i>
+                    </div>
+                    <span class="font-bold text-lg">Remember Me</span>
+                </div>
+                
+                <div class="flex gap-8 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+                
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="text-center mt-8 text-xs text-gray-600">
+                &copy; 2023 Remember Me App Inc. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-brand-dark/80', 'backdrop-blur-md', 'shadow-lg');
+            } else {
+                navbar.classList.remove('bg-brand-dark/80', 'backdrop-blur-md', 'shadow-lg');
+            }
+        });
+
+        // Intersection Observer for Reveal Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
